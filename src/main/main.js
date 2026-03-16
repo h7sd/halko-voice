@@ -262,11 +262,3 @@ ipcMain.handle('unregister-all-shortcuts', () => {
   registeredShortcuts.clear();
   return true;
 });
-
-ipcMain.handle('check-for-updates', () => {
-  autoUpdater.checkForUpdates();
-});
-
-ipcMain.handle('quit-and-install', () => {
-  autoUpdater.quitAndInstall();
-});
