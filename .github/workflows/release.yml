@@ -23,30 +23,16 @@ jobs:
       - name: Build
         run: npm run build
       
-      - name: Find release artifacts
-        id: artifacts
-        shell: powershell
-        run: |
-          $installer = Get-ChildItem -Path "dist" -Filter "Halko Voice-*.exe" -File | Where-Object { $_.Name -notlike "*portable*" } | Select-Object -First 1
-          $portable = Get-ChildItem -Path "dist" -Filter "Halko Voice-portable-*.exe" -File | Select-Object -First 1
-          $blockmap = Get-ChildItem -Path "dist" -Filter "*.blockmap" -File | Select-Object -First 1
-          $latest = Get-ChildItem -Path "dist" -Filter "latest.yml" -File | Select-Object -First 1
-          
-          $files = @()
-          if ($installer) { $files += $installer.FullName }
-          if ($portable) { $files += $portable.FullName }
-          if ($blockmap) { $files += $blockmap.FullName }
-          if ($latest) { $files += $latest.FullName }
-          
-          $fileList = $files -join ","
-          Write-Host "Found files: $fileList"
-          echo "files=$fileList" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      - name: List artifacts for debugging
+        run: dir dist /s | findstr ".exe"
       
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          artifacts: ${{ steps.artifacts.outputs.files }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: dist/Halko Voice-*.exe,dist/Halko Voice-*.exe.blockmap,dist/latest.yml
           draft: false
           prerelease: false
-          generateReleaseNotes: true
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
