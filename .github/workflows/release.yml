@@ -20,53 +20,29 @@ jobs:
       
       - run: npm run build
       
-      - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Fix latest.yml for portable version
+        shell: powershell
+        run: |
+          $content = @"
+version: 1.1.0
+files:
+  - url: Halko Voice-portable-1.1.0.exe
+    sha512: yUuTinfRPicRZlWpDQ1fc60ylMCMJxu4lDmSjebH5pth7fVfKRFdH9qHZMkr+mn7TG+uOtV1efTtsozOVs9B1g==
+    size: 106496236
+path: Halko Voice-portable-1.1.0.exe
+sha512: yUuTinfRPicRZlWpDQ1fc60ylMCMJxu4lDmSjebH5pth7fVfKRFdH9qHZMkr+mn7TG+uOtV1efTtsozOVs9B1g==
+releaseDate: '$(Get-Date -AsUTC -Format "yyyy-MM-ddTHH:mm:ss.000Z")'
+"@
+          Set-Content -Path "dist/latest.yml" -Value $content
+          Write-Host "latest.yml fixed for portable version"
       
-      - name: Upload EXE Installer
-        uses: actions/upload-release-asset@v1
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/Halko Voice-1.1.0.exe
-          asset_name: Halko Voice-1.1.0.exe
-          asset_content_type: application/octet-stream
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Upload EXE Portable
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/Halko Voice-portable-1.1.0.exe
-          asset_name: Halko Voice-portable-1.1.0.exe
-          asset_content_type: application/octet-stream
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Upload Blockmap
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/Halko Voice-1.1.0.exe.blockmap
-          asset_name: Halko Voice-1.1.0.exe.blockmap
-          asset_content_type: application/octet-stream
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Upload latest.yml
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/latest.yml
-          asset_name: latest.yml
-          asset_content_type: text/yaml
+          files: |
+            dist/Halko Voice-1.1.0.exe
+            dist/Halko Voice-portable-1.1.0.exe
+            dist/Halko Voice-1.1.0.exe.blockmap
+            dist/latest.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
