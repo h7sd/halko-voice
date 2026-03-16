@@ -20,29 +20,10 @@ jobs:
       
       - run: npm run build
       
-      - name: Fix latest.yml for portable version
-        shell: powershell
-        run: |
-          $content = @"
-version: 1.1.0
-files:
-  - url: Halko Voice-portable-1.1.0.exe
-    sha512: yUuTinfRPicRZlWpDQ1fc60ylMCMJxu4lDmSjebH5pth7fVfKRFdH9qHZMkr+mn7TG+uOtV1efTtsozOVs9B1g==
-    size: 106496236
-path: Halko Voice-portable-1.1.0.exe
-sha512: yUuTinfRPicRZlWpDQ1fc60ylMCMJxu4lDmSjebH5pth7fVfKRFdH9qHZMkr+mn7TG+uOtV1efTtsozOVs9B1g==
-releaseDate: '$(Get-Date -AsUTC -Format "yyyy-MM-ddTHH:mm:ss.000Z")'
-"@
-          Set-Content -Path "dist/latest.yml" -Value $content
-          Write-Host "latest.yml fixed for portable version"
-      
-      - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+      - name: Create Release and Upload Assets
+        uses: ncipollo/release-action@v1
         with:
-          files: |
-            dist/Halko Voice-1.1.0.exe
-            dist/Halko Voice-portable-1.1.0.exe
-            dist/Halko Voice-1.1.0.exe.blockmap
-            dist/latest.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: "dist/Halko Voice-1.1.0.exe,dist/Halko Voice-portable-1.1.0.exe,dist/Halko Voice-1.1.0.exe.blockmap,dist/latest.yml"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
