@@ -103,6 +103,11 @@ export default function VoicePanel({ config, onSpeakStatus }) {
           const nonVb = outputs.find(d => !d.label.toLowerCase().includes('cable') && !d.label.toLowerCase().includes('vb-audio')) || outputs[0];
           if (nonVb) { setMonitorDevice(nonVb.deviceId); localStorage.setItem('halko_monitor', nonVb.deviceId); }
         }
+
+        // Auto-start passthrough if VB-Cable is found
+        if (vb) {
+          startPassthrough(savedMic || 'default', vb.deviceId);
+        }
       } catch {}
     }
     loadDevices();
