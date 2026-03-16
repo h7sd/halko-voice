@@ -1,0 +1,66 @@
+{
+  "name": "halko-voice",
+  "version": "1.1.0",
+  "description": "Halko Voice - Discord Sprachassistent & Motivator",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron . --dev\"",
+    "build": "vite build && electron-builder --win --x64",
+    "pack": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.halko.voice",
+    "productName": "Halko Voice",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "h7sd",
+        "repo": "halko-voice"
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "include": "build/installer.nsh",
+      "warningsAsErrors": false
+    },
+    "files": [
+      "src/**/*",
+      "dist-renderer/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": []
+  },
+  "dependencies": {
+    "@discordjs/voice": "^0.19.0",
+    "@noble/ciphers": "^2.1.1",
+    "@snazzah/davey": "^0.1.10",
+    "discord.js": "^14.16.3",
+    "edge-tts-universal": "^1.0.5",
+    "electron-updater": "^6.1.7",
+    "ffmpeg-static": "^5.2.0",
+    "framer-motion": "^12.35.2",
+    "groq-sdk": "^0.37.0",
+    "libsodium-wrappers": "^0.8.2",
+    "node-fetch": "^3.3.2",
+    "opusscript": "^0.0.8",
+    "prism-media": "^1.3.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "concurrently": "^9.1.2",
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3",
+    "electron-reload": "^2.0.0-alpha.1",
+    "vite": "^7.3.1",
+    "wait-on": "^8.0.4"
+  }
+}
