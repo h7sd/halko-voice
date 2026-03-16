@@ -37,6 +37,43 @@ function MacControl({ color, onClick, icon }) {
   );
 }
 
+function AppleIntelligenceGlow({ active }) {
+  return (
+    <AnimatePresence>
+      {active && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none',
+            border: '3px solid transparent',
+            borderRadius: 'inherit',
+            overflow: 'hidden'
+          }}
+        >
+          <motion.div
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              rotate: { duration: 4, repeat: Infinity, ease: "linear" },
+              scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+            }}
+            style={{
+              position: 'absolute', inset: -100,
+              background: 'conic-gradient(from 0deg, #007aff, #5856d6, #af52de, #ff2d55, #ff9500, #ffcc00, #34c759, #007aff)',
+              filter: 'blur(40px)', opacity: 0.4
+            }}
+          />
+          <div style={{ position: 'absolute', inset: 0, border: '2px solid rgba(0,122,255,0.5)', borderRadius: 'inherit' }} />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   const [panel, setPanel] = useState('voice');
   const [showSplash, setShowSplash] = useState(true);
@@ -48,6 +85,7 @@ export default function App() {
     ttsEngine: 'edge',
   });
   const [groqReady, setGroqReady] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     window.halko?.loadConfig().then(async cfg => {
@@ -115,6 +153,7 @@ export default function App() {
       color: '#fff'
     }}>
       <AuroraBackground />
+      <AppleIntelligenceGlow active={isSpeaking} />
 
       <AnimatePresence>
         {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
@@ -195,8 +234,8 @@ export default function App() {
                 transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                 style={{ position: 'absolute', inset: '20px', display: 'flex', flexDirection: 'column' }}
               >
-                {panel === 'voice' && <VoicePanel config={config} />}
-                {panel === 'chat' && <ChatPanel config={config} groqReady={groqReady} />}
+                {panel === 'voice' && <VoicePanel config={config} onSpeakStatus={setIsSpeaking} />}
+                {panel === 'chat' && <ChatPanel config={config} groqReady={groqReady} onSpeakStatus={setIsSpeaking} />}
                 {panel === 'changelog' && <ChangelogPanel />}
                 {panel === 'settings' && (
                   <SettingsPanel
@@ -215,10 +254,18 @@ export default function App() {
       </div>
 
       <div style={{ 
-        position: 'fixed', bottom: 10, left: 0, right: 0, 
-        textAlign: 'center', pointerEvents: 'none', zIndex: 100 
+        position: 'fixed', bottom: 12, left: 0, width: '100%',
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        pointerEvents: 'none', zIndex: 100 
       }}>
-        <div style={{ fontSize: 9, color: 'rgba(0,122,255,0.3)', fontWeight: 700, letterSpacing: '0.02em' }}>
+        <div style={{ 
+          fontSize: 10, color: 'rgba(0,122,255,0.4)', fontWeight: 700, 
+          letterSpacing: '0.03em', textTransform: 'uppercase',
+          padding: '4px 12px', borderRadius: 20,
+          background: 'rgba(0,122,255,0.05)',
+          backdropFilter: 'blur(5px)',
+          border: '1px solid rgba(0,122,255,0.1)'
+        }}>
           made with ❤️ by crck2poor
         </div>
       </div>

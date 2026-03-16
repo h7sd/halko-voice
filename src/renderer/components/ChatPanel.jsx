@@ -19,7 +19,7 @@ function SendIcon() {
   );
 }
 
-export default function ChatPanel({ config, groqReady }) {
+export default function ChatPanel({ config, groqReady, onSpeakStatus }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [typing, setTyping] = useState(false);
@@ -53,10 +53,12 @@ export default function ChatPanel({ config, groqReady }) {
     setText('');
     if (textareaRef.current) { textareaRef.current.style.height = 'auto'; }
     setTyping(true);
+    onSpeakStatus?.(true);
     scrollDown();
 
     const res = await window.halko?.chatGroq({ message: t, model: config.selectedModel });
     setTyping(false);
+    onSpeakStatus?.(false);
 
     const replyTime = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     if (res?.success) {

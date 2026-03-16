@@ -33,7 +33,7 @@ function SendIcon() {
   );
 }
 
-export default function VoicePanel({ config }) {
+export default function VoicePanel({ config, onSpeakStatus }) {
   const [text, setText] = useState('');
   const [engine, setEngine] = useState(config.ttsEngine || 'edge');
   const [voice, setVoice] = useState(config.selectedVoice || 'de-DE-ConradNeural');
@@ -178,6 +178,7 @@ export default function VoicePanel({ config }) {
   const speak = useCallback(async (txt) => {
     if (!txt) return;
     addHistory(txt);
+    onSpeakStatus?.(true);
     try {
       const res = await window.halko?.ttsSpeak({ text: txt, engine, voice, apiKey: config.groqApiKey });
       if (res?.success) {
@@ -189,17 +190,21 @@ export default function VoicePanel({ config }) {
       }
     } catch (err) {
       addHistory('Fehler: ' + err.message);
+    } finally {
+      onSpeakStatus?.(false);
     }
-  }, [addHistory, engine, voice, config.groqApiKey, playOnDevice, monitorDevice, vbCableId]);
+  }, [addHistory, engine, voice, config.groqApiKey, playOnDevice, monitorDevice, vbCableId, onSpeakStatus]);
 
   const send = async () => {
     const t = text.trim();
     if (!t || sending) return;
     setSending(true);
+    onSpeakStatus?.(true);
     setText('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
     await speak(t);
     setSending(false);
+    onSpeakStatus?.(false);
   };
 
   useEffect(() => {

@@ -53,20 +53,21 @@ export default function Sidebar({ active, onChange }) {
 
   return (
     <nav style={{
-      width: 68,
-      background: 'rgba(0,10,30,0.4)',
-      backdropFilter: 'blur(40px)',
-      borderRight: '1px solid rgba(0,122,255,0.1)',
+      width: 72,
+      background: 'rgba(0,10,30,0.6)',
+      backdropFilter: 'blur(50px)',
+      borderRight: '1px solid rgba(255,255,255,0.05)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      paddingTop: 20,
-      paddingBottom: 20,
-      gap: 12,
+      paddingTop: 16,
+      paddingBottom: 24,
+      gap: 16,
       flexShrink: 0,
       position: 'relative',
       zIndex: 10,
     }}>
+      {/* Remove the H logo by just using clean tabs */}
       {TABS.map((tab) => {
         const isActive = active === tab.id;
         const isHovered = hovered === tab.id;
@@ -81,9 +82,9 @@ export default function Sidebar({ active, onChange }) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               style={{
-                width: 44,
-                height: 44,
-                borderRadius: 12,
+                width: 42,
+                height: 42,
+                borderRadius: 10,
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
@@ -91,11 +92,11 @@ export default function Sidebar({ active, onChange }) {
                 justifyContent: 'center',
                 position: 'relative',
                 background: isActive
-                  ? 'rgba(0,122,255,0.15)'
+                  ? 'rgba(0,122,255,0.1)'
                   : 'transparent',
-                color: isActive ? '#007aff' : 'rgba(255,255,255,0.3)',
-                boxShadow: isActive ? '0 4px 15px rgba(0,122,255,0.2), inset 0 0 0 1px rgba(0,122,255,0.1)' : 'none',
-                transition: 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)',
+                color: isActive ? '#007aff' : 'rgba(255,255,255,0.25)',
+                boxShadow: isActive ? 'inset 0 0 0 1px rgba(0,122,255,0.15)' : 'none',
+                transition: 'all 0.2s ease',
               }}
             >
               <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
