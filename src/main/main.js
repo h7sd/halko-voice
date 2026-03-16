@@ -87,6 +87,7 @@ async function ttsEdge(text, voice) {
 function createWindow() {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.allowDowngrade = false;
   
   mainWindow = new BrowserWindow({
     width: 900,
@@ -119,44 +120,77 @@ function createWindow() {
   }
 }
 
+let updateCheckTimeout;
+let hasUpdateResponse = false;
+
+console.log('[Main] AutoUpdater konfiguriert mit:');
+console.log('[Main] - App ID:', 'com.halko.voice');
+console.log('[Main] - GitHub Owner: h7sd');
+console.log('[Main] - GitHub Repo: halko-voice');
+console.log('[Main] - Feed URL: https://github.com/h7sd/halko-voice/releases/latest/download/latest.yml');
+
+// Auto-updater events setup (EINMAL beim laden)
+autoUpdater.on('checking-for-update', () => {
+  console.log('[Updater] Suche nach Updates...');
+  hasUpdateResponse = false;
+  if (mainWindow) mainWindow.webContents.send('checking-for-update');
+  
+  // Timeout: Nach 3 Sekunden wenn keine Response, "up to date" anzeigen
+  updateCheckTimeout = setTimeout(() => {
+    if (!hasUpdateResponse) {
+      console.log('[Updater] Timeout - keine Response');
+      if (mainWindow) mainWindow.webContents.send('update-not-available');
+    }
+  }, 3000);
+});
+
+autoUpdater.on('update-available', (info) => {
+  clearTimeout(updateCheckTimeout);
+  hasUpdateResponse = true;
+  console.log('[Updater] Update verfügbar:', info.version);
+  if (mainWindow) mainWindow.webContents.send('update-available');
+});
+
+autoUpdater.on('update-not-available', () => {
+  clearTimeout(updateCheckTimeout);
+  hasUpdateResponse = true;
+  console.log('[Updater] Keine neuen Updates.');
+  if (mainWindow) mainWindow.webContents.send('update-not-available');
+});
+
+autoUpdater.on('error', (err) => {
+  clearTimeout(updateCheckTimeout);
+  hasUpdateResponse = true;
+  console.error('[Updater] Fehler DETAIL:', err);
+  console.error('[Updater] Error Message:', err.message);
+  console.error('[Updater] Error Stack:', err.stack);
+  if (mainWindow) mainWindow.webContents.send('update-error', err.message);
+});
+
+autoUpdater.on('download-progress', (progress) => {
+  console.log(`[Updater] Download: ${progress.percent}%`);
+  if (mainWindow) mainWindow.webContents.send('update-progress', progress.percent);
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  clearTimeout(updateCheckTimeout);
+  console.log('[Updater] Update fertig heruntergeladen:', info.version);
+  if (mainWindow) mainWindow.webContents.send('update-downloaded');
+  setTimeout(() => autoUpdater.quitAndInstall(), 500);
+});
+
 app.whenReady().then(async () => {
   createWindow();
-  
-  // Auto-updater events setup
-  autoUpdater.on('checking-for-update', () => {
-    console.log('[Updater] Suche nach Updates...');
-    if (mainWindow) mainWindow.webContents.send('checking-for-update');
-  });
-
-  autoUpdater.on('update-available', (info) => {
-    console.log('[Updater] Update verfügbar:', info.version);
-    if (mainWindow) mainWindow.webContents.send('update-available');
-  });
-
-  autoUpdater.on('update-not-available', () => {
-    console.log('[Updater] Keine neuen Updates.');
-    if (mainWindow) mainWindow.webContents.send('update-not-available');
-  });
-
-  autoUpdater.on('error', (err) => {
-    console.error('[Updater] Fehler:', err);
-    if (mainWindow) mainWindow.webContents.send('update-error', err.message);
-  });
-
-  autoUpdater.on('download-progress', (progress) => {
-    console.log(`[Updater] Download: ${progress.percent}%`);
-    if (mainWindow) mainWindow.webContents.send('update-progress', progress.percent);
-  });
-
-  autoUpdater.on('update-downloaded', (info) => {
-    console.log('[Updater] Update fertig heruntergeladen:', info.version);
-    if (mainWindow) mainWindow.webContents.send('update-downloaded');
-  });
 
   // Verzögerte Update-Prüfung (nach 3 Sekunden)
   setTimeout(() => {
     autoUpdater.checkForUpdatesAndNotify();
   }, 3000);
+  
+  // Jede Stunde nach Updates suchen
+  setInterval(() => {
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 60 * 60 * 1000);
 
   const cfg = loadConfig();
   if (cfg.groqApiKey) {
@@ -180,8 +214,15 @@ ipcMain.handle('save-config', (_, config) => { saveConfig(config); return true; 
 ipcMain.handle('window-minimize', () => mainWindow.minimize());
 ipcMain.handle('window-maximize', () => { if (mainWindow.isMaximized()) mainWindow.unmaximize(); else mainWindow.maximize(); });
 ipcMain.handle('window-close', () => app.quit());
-ipcMain.handle('check-for-updates', () => autoUpdater.checkForUpdatesAndNotify());
-ipcMain.handle('quit-and-install', () => autoUpdater.quitAndInstall());
+ipcMain.handle('check-for-updates', () => {
+  console.log('[IPC] check-for-updates aufgerufen');
+  autoUpdater.checkForUpdatesAndNotify();
+  return true;
+});
+ipcMain.handle('quit-and-install', () => {
+  console.log('[IPC] quit-and-install aufgerufen');
+  autoUpdater.quitAndInstall();
+});
 
 ipcMain.handle('init-groq', async (_, apiKey) => {
   try {
