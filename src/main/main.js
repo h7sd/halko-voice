@@ -122,9 +122,7 @@ function createWindow() {
 app.whenReady().then(async () => {
   createWindow();
   
-  autoUpdater.checkForUpdatesAndNotify();
-  
-  // Auto-updater events
+  // Auto-updater events setup
   autoUpdater.on('checking-for-update', () => {
     console.log('[Updater] Suche nach Updates...');
     if (mainWindow) mainWindow.webContents.send('checking-for-update');
@@ -153,8 +151,12 @@ app.whenReady().then(async () => {
   autoUpdater.on('update-downloaded', (info) => {
     console.log('[Updater] Update fertig heruntergeladen:', info.version);
     if (mainWindow) mainWindow.webContents.send('update-downloaded');
-    // We wait for the user to click or we can auto-install on close
   });
+
+  // Verzögerte Update-Prüfung (nach 3 Sekunden)
+  setTimeout(() => {
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 3000);
 
   const cfg = loadConfig();
   if (cfg.groqApiKey) {
@@ -178,6 +180,8 @@ ipcMain.handle('save-config', (_, config) => { saveConfig(config); return true; 
 ipcMain.handle('window-minimize', () => mainWindow.minimize());
 ipcMain.handle('window-maximize', () => { if (mainWindow.isMaximized()) mainWindow.unmaximize(); else mainWindow.maximize(); });
 ipcMain.handle('window-close', () => app.quit());
+ipcMain.handle('check-for-updates', () => autoUpdater.checkForUpdatesAndNotify());
+ipcMain.handle('quit-and-install', () => autoUpdater.quitAndInstall());
 
 ipcMain.handle('init-groq', async (_, apiKey) => {
   try {
