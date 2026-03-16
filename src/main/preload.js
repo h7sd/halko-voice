@@ -13,6 +13,18 @@ contextBridge.exposeInMainWorld('halko', {
   registerShortcut: (params) => ipcRenderer.invoke('register-shortcut', params),
   unregisterShortcut: (id) => ipcRenderer.invoke('unregister-shortcut', id),
   unregisterAllShortcuts: () => ipcRenderer.invoke('unregister-all-shortcuts'),
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  quitAndInstall: () => ipcRenderer.invoke('quit-and-install'),
+  onUpdateAvailable: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on('update-available', listener);
+    return () => ipcRenderer.removeListener('update-available', listener);
+  },
+  onUpdateDownloaded: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on('update-downloaded', listener);
+    return () => ipcRenderer.removeListener('update-downloaded', listener);
+  },
   onPresetTriggered: (callback) => {
     const listener = (_, id) => callback(id);
     ipcRenderer.on('preset-triggered', listener);

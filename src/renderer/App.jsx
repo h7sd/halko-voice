@@ -118,8 +118,12 @@ export default function App() {
   });
   const [groqReady, setGroqReady] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState('none'); // none, available, downloaded
 
   useEffect(() => {
+    window.halko?.onUpdateAvailable(() => setUpdateStatus('available'));
+    window.halko?.onUpdateDownloaded(() => setUpdateStatus('downloaded'));
+
     window.halko?.loadConfig().then(async cfg => {
       if (cfg) {
         setConfig(cfg);
@@ -234,7 +238,29 @@ export default function App() {
           </span>
         </div>
 
-        <div style={{ width: 100, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <div style={{ width: 120, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 10 }}>
+          {updateStatus !== 'none' && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              whileHover={{ scale: 1.1 }}
+              onClick={() => updateStatus === 'downloaded' && window.halko?.quitAndInstall()}
+              style={{
+                width: 22, height: 22, borderRadius: '50%',
+                background: updateStatus === 'downloaded' ? '#22d46e' : '#ff9500',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: updateStatus === 'downloaded' ? 'pointer' : 'default',
+                boxShadow: `0 0 15px ${updateStatus === 'downloaded' ? 'rgba(34,212,110,0.4)' : 'rgba(255,149,0,0.4)'}`,
+              }}
+              title={updateStatus === 'downloaded' ? 'Update bereit zum Installieren' : 'Update wird heruntergeladen...'}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </motion.div>
+          )}
           {panel === 'chat' && (
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,

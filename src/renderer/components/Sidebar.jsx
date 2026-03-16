@@ -48,6 +48,17 @@ function GearIcon({ size = 20 }) {
   );
 }
 
+function CloudIcon({ size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+      <path d="m12 13 3-3"/>
+      <path d="M12 10v6"/>
+      <path d="m9 10 3-3"/>
+    </svg>
+  );
+}
+
 export default function Sidebar({ active, onChange }) {
   const [hovered, setHovered] = useState(null);
 
@@ -148,6 +159,38 @@ export default function Sidebar({ active, onChange }) {
           </div>
         );
       })}
+
+      <div style={{ flex: 1 }} />
+
+      <motion.button
+        onMouseEnter={() => setHovered('update')}
+        onMouseLeave={() => setHovered(null)}
+        onClick={() => window.halko?.checkForUpdates()}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        style={{
+          width: 42, height: 42, borderRadius: 10, border: 'none',
+          background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)',
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 8, position: 'relative'
+        }}
+      >
+        <CloudIcon size={20} />
+        <AnimatePresence>
+          {hovered === 'update' && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -5 }}
+              style={{
+                position: 'absolute', left: 55, background: 'rgba(0,10,30,0.8)',
+                padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600,
+                color: '#fff', whiteSpace: 'nowrap', border: '1px solid rgba(0,122,255,0.2)'
+              }}
+            >
+              Update suchen
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.button>
     </nav>
   );
 }
