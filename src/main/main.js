@@ -122,13 +122,33 @@ app.whenReady().then(async () => {
   autoUpdater.checkForUpdatesAndNotify();
   
   // Auto-updater events
-  autoUpdater.on('update-available', () => {
+  autoUpdater.on('checking-for-update', () => {
+    console.log('[Updater] Suche nach Updates...');
+  });
+
+  autoUpdater.on('update-available', (info) => {
+    console.log('[Updater] Update verfügbar:', info.version);
     if (mainWindow) mainWindow.webContents.send('update-available');
   });
-  
-  autoUpdater.on('update-downloaded', () => {
+
+  autoUpdater.on('update-not-available', () => {
+    console.log('[Updater] Keine neuen Updates.');
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.error('[Updater] Fehler:', err);
+    if (mainWindow) mainWindow.webContents.send('update-error', err.message);
+  });
+
+  autoUpdater.on('download-progress', (progress) => {
+    console.log(`[Updater] Download: ${progress.percent}%`);
+    if (mainWindow) mainWindow.webContents.send('update-progress', progress.percent);
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    console.log('[Updater] Update fertig heruntergeladen:', info.version);
     if (mainWindow) mainWindow.webContents.send('update-downloaded');
-    // autoUpdater.quitAndInstall(); // You can decide when to install
+    // We wait for the user to click or we can auto-install on close
   });
 
   const cfg = loadConfig();

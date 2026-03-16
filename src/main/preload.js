@@ -25,6 +25,16 @@ contextBridge.exposeInMainWorld('halko', {
     ipcRenderer.on('update-downloaded', listener);
     return () => ipcRenderer.removeListener('update-downloaded', listener);
   },
+  onUpdateError: (callback) => {
+    const listener = (_, err) => callback(err);
+    ipcRenderer.on('update-error', listener);
+    return () => ipcRenderer.removeListener('update-error', listener);
+  },
+  onUpdateProgress: (callback) => {
+    const listener = (_, percent) => callback(percent);
+    ipcRenderer.on('update-progress', listener);
+    return () => ipcRenderer.removeListener('update-progress', listener);
+  },
   onPresetTriggered: (callback) => {
     const listener = (_, id) => callback(id);
     ipcRenderer.on('preset-triggered', listener);
