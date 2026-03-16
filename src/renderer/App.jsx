@@ -125,6 +125,7 @@ export default function App() {
     window.halko?.onCheckingForUpdate(() => setUpdateStatus('searching'));
     window.halko?.onUpdateAvailable(() => setUpdateStatus('available'));
     window.halko?.onUpdateNotAvailable(() => {
+      setUpdateStatus('uptodate');
       setTimeout(() => setUpdateStatus('none'), 3000);
     });
     window.halko?.onUpdateDownloaded(() => setUpdateStatus('downloaded'));
@@ -268,11 +269,11 @@ export default function App() {
             >
               <div style={{ 
                 width: 8, height: 8, borderRadius: '50%', 
-                background: updateStatus === 'downloaded' ? '#22d46e' : '#ff9500',
+                background: updateStatus === 'downloaded' ? '#22d46e' : updateStatus === 'uptodate' ? '#007aff' : '#ff9500',
                 animation: updateStatus === 'downloading' ? 'pulse 1s infinite' : 'none'
               }} />
-              <span style={{ fontSize: 10, fontWeight: 800, color: updateStatus === 'downloaded' ? '#22d46e' : '#ff9500', textTransform: 'uppercase' }}>
-                {updateStatus === 'downloaded' ? 'Update bereit' : updateStatus === 'downloading' ? `Laden ${Math.round(updateProgress)}%` : updateStatus === 'searching' ? 'Suche...' : 'Update verfügbar'}
+              <span style={{ fontSize: 10, fontWeight: 800, color: updateStatus === 'downloaded' ? '#22d46e' : updateStatus === 'uptodate' ? '#007aff' : '#ff9500', textTransform: 'uppercase' }}>
+                {updateStatus === 'downloaded' ? 'Update bereit' : updateStatus === 'downloading' ? `Laden ${Math.round(updateProgress)}%` : updateStatus === 'searching' ? 'Suche...' : updateStatus === 'uptodate' ? 'Up to date' : 'Update verfügbar'}
               </span>
             </motion.div>
           )}

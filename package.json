@@ -12,6 +12,12 @@
   "build": {
     "appId": "com.halko.voice",
     "productName": "Halko Voice",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/@discordjs/**/*",
+      "node_modules/discord.js/**/*",
+      "node_modules/ffmpeg-static/**/*"
+    ],
     "publish": [
       {
         "provider": "github",
@@ -20,13 +26,20 @@
       }
     ],
     "win": {
-      "target": "nsis"
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "include": "build/installer.nsh",
-      "warningsAsErrors": false
+      "warningsAsErrors": false,
+      "artifactName": "${productName}-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-portable-${version}.${ext}"
     },
     "files": [
       "src/**/*",
