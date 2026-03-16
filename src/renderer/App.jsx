@@ -47,27 +47,59 @@ function AppleIntelligenceGlow({ active }) {
           exit={{ opacity: 0 }}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none',
-            border: '3px solid transparent',
-            borderRadius: 'inherit',
+            padding: 2, // The "bezel" thickness
             overflow: 'hidden'
           }}
         >
-          <motion.div
-            animate={{
-              rotate: [0, 360],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              rotate: { duration: 4, repeat: Infinity, ease: "linear" },
-              scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-            }}
-            style={{
-              position: 'absolute', inset: -100,
-              background: 'conic-gradient(from 0deg, #007aff, #5856d6, #af52de, #ff2d55, #ff9500, #ffcc00, #34c759, #007aff)',
-              filter: 'blur(40px)', opacity: 0.4
-            }}
-          />
-          <div style={{ position: 'absolute', inset: 0, border: '2px solid rgba(0,122,255,0.5)', borderRadius: 'inherit' }} />
+          {/* Inner masking to keep it only at the edges */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            WebkitMaskImage: 'linear-gradient(black, black), linear-gradient(black, black)',
+            WebkitMaskClip: 'content-box, border-box',
+            WebkitMaskComposite: 'exclude',
+            padding: 8, // Width of the visible glow area
+          }}>
+            <motion.div
+              animate={{
+                rotate: [0, 360],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                rotate: { duration: 5, repeat: Infinity, ease: "linear" },
+                scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+              }}
+              style={{
+                position: 'absolute', inset: -200,
+                background: 'conic-gradient(from 0deg, #5efce8, #736efe, #f12711, #f5af19, #9facee, #5efce8)',
+                filter: 'blur(25px)',
+                opacity: 0.9
+              }}
+            />
+          </div>
+
+          {/* Optional secondary light layer for more "Apple" fluid feel */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            WebkitMaskImage: 'linear-gradient(black, black), linear-gradient(black, black)',
+            WebkitMaskClip: 'content-box, border-box',
+            WebkitMaskComposite: 'exclude',
+            padding: 4,
+          }}>
+             <motion.div
+              animate={{
+                rotate: [360, 0],
+              }}
+              transition={{
+                rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+              }}
+              style={{
+                position: 'absolute', inset: -150,
+                background: 'conic-gradient(from 0deg, #3f5efb, #fc466b, #3f5efb)',
+                filter: 'blur(15px)',
+                opacity: 0.6
+              }}
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
