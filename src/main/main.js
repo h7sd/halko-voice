@@ -85,6 +85,9 @@ async function ttsEdge(text, voice) {
 
 // === Window ===
 function createWindow() {
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+  
   mainWindow = new BrowserWindow({
     width: 900,
     height: 700,
@@ -124,6 +127,7 @@ app.whenReady().then(async () => {
   // Auto-updater events
   autoUpdater.on('checking-for-update', () => {
     console.log('[Updater] Suche nach Updates...');
+    if (mainWindow) mainWindow.webContents.send('checking-for-update');
   });
 
   autoUpdater.on('update-available', (info) => {
@@ -133,6 +137,7 @@ app.whenReady().then(async () => {
 
   autoUpdater.on('update-not-available', () => {
     console.log('[Updater] Keine neuen Updates.');
+    if (mainWindow) mainWindow.webContents.send('update-not-available');
   });
 
   autoUpdater.on('error', (err) => {

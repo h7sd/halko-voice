@@ -118,11 +118,15 @@ export default function App() {
   });
   const [groqReady, setGroqReady] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [updateStatus, setUpdateStatus] = useState('none'); // none, available, downloaded
+  const [updateStatus, setUpdateStatus] = useState('none'); // none, searching, available, downloading, downloaded
   const [updateProgress, setUpdateProgress] = useState(0);
 
   useEffect(() => {
+    window.halko?.onCheckingForUpdate(() => setUpdateStatus('searching'));
     window.halko?.onUpdateAvailable(() => setUpdateStatus('available'));
+    window.halko?.onUpdateNotAvailable(() => {
+      setTimeout(() => setUpdateStatus('none'), 3000);
+    });
     window.halko?.onUpdateDownloaded(() => setUpdateStatus('downloaded'));
     window.halko?.onUpdateProgress((p) => {
       setUpdateProgress(p);
@@ -268,7 +272,7 @@ export default function App() {
                 animation: updateStatus === 'downloading' ? 'pulse 1s infinite' : 'none'
               }} />
               <span style={{ fontSize: 10, fontWeight: 800, color: updateStatus === 'downloaded' ? '#22d46e' : '#ff9500', textTransform: 'uppercase' }}>
-                {updateStatus === 'downloaded' ? 'Update bereit' : updateStatus === 'downloading' ? `Laden ${Math.round(updateProgress)}%` : 'Update verfügbar'}
+                {updateStatus === 'downloaded' ? 'Update bereit' : updateStatus === 'downloading' ? `Laden ${Math.round(updateProgress)}%` : updateStatus === 'searching' ? 'Suche...' : 'Update verfügbar'}
               </span>
             </motion.div>
           )}
