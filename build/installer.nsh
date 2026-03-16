@@ -246,9 +246,9 @@ Var hv_LaunchCheck
 !macroend
 
 ; ============================================================
-;  preInit — first lines of .onInit — create fonts
+;  customInit — injected into .onInit — create fonts
 ; ============================================================
-!macro preInit
+!macro customInit
   CreateFont $hv_FontBig   "Segoe UI" 26 700
   CreateFont $hv_FontTitle "Segoe UI" 15 700
   CreateFont $hv_FontMed   "Segoe UI" 12 600
