@@ -36,54 +36,54 @@ Var hv_LaunchCheck
     ${EndIf}
     ${NSD_CreateLabel} 0 0 100% 100% ""
     Pop $R9
-    SetCtlColors $R9 "" "090909"
+    SetCtlColors $R9 "" "000814"
     ${NSD_CreateLabel} 0u 0u 4u 100% ""
     Pop $R9
-    SetCtlColors $R9 "" "7C6BFF"
+    SetCtlColors $R9 "" "007AFF"
     ${NSD_CreateLabel} 18u 22u 52u 52u "H"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontBig 0
-    SetCtlColors $R9 "FFFFFF" "7C6BFF"
+    SetCtlColors $R9 "FFFFFF" "007AFF"
     ${NSD_CreateLabel} 80u 22u 200u 28u "Halko Voice"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontBig 0
-    SetCtlColors $R9 "EEEEF8" "090909"
+    SetCtlColors $R9 "EEEEF8" "000814"
     ${NSD_CreateLabel} 80u 52u 150u 14u "Version ${VERSION}"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "7C6BFF" "090909"
+    SetCtlColors $R9 "007AFF" "000814"
     ${NSD_CreateLabel} 18u 86u 244u 1u ""
     Pop $R9
-    SetCtlColors $R9 "" "252532"
+    SetCtlColors $R9 "" "001A35"
     ${NSD_CreateLabel} 18u 98u 244u 44u "Dein Discord-Sprachassistent mit KI-Stimme.$\n$\nSprich durch deinen Bot — smooth, schnell, smart."
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "8888A8" "090909"
+    SetCtlColors $R9 "8888A8" "000814"
     ${NSD_CreateLabel} 18u 152u 62u 17u " Edge TTS "
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "9D8FFF" "1A1A24"
+    SetCtlColors $R9 "007AFF" "001A35"
     ${NSD_CreateLabel} 88u 152u 52u 17u " Groq AI "
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "9D8FFF" "1A1A24"
+    SetCtlColors $R9 "007AFF" "001A35"
     ${NSD_CreateLabel} 148u 152u 76u 17u " Discord Bot "
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "9D8FFF" "1A1A24"
+    SetCtlColors $R9 "007AFF" "001A35"
     ${NSD_CreateLabel} 0u 198u 100% 1u ""
     Pop $R9
-    SetCtlColors $R9 "" "252532"
+    SetCtlColors $R9 "" "001A35"
     ${NSD_CreateLabel} 18u 206u 160u 13u "Klick Weiter um fortzufahren"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "44445A" "090909"
+    SetCtlColors $R9 "44445A" "000814"
     GetDlgItem $R9 $HWNDPARENT 1
     SendMessage $R9 ${WM_SETFONT} $hv_FontMed 0
-    SetCtlColors $R9 "FFFFFF" "7C6BFF"
+    SetCtlColors $R9 "FFFFFF" "007AFF"
     GetDlgItem $R9 $HWNDPARENT 2
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "8888A8" "111118"
+    SetCtlColors $R9 "8888A8" "000814"
     nsDialogs::Show
   FunctionEnd
   Function hv_WelcomeLeave
@@ -98,7 +98,7 @@ Var hv_LaunchCheck
     ${EndIf}
     ${NSD_CreateLabel} 0 0 100% 100% ""
     Pop $R9
-    SetCtlColors $R9 "" "090909"
+    SetCtlColors $R9 "" "000814"
     ${NSD_CreateLabel} 0u 0u 4u 100% ""
     Pop $R9
     SetCtlColors $R9 "" "22D46E"
@@ -109,26 +109,26 @@ Var hv_LaunchCheck
     ${NSD_CreateLabel} 72u 20u 188u 20u "Installation abgeschlossen!"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontTitle 0
-    SetCtlColors $R9 "EEEEF8" "090909"
+    SetCtlColors $R9 "EEEEF8" "000814"
     ${NSD_CreateLabel} 72u 43u 188u 13u "Halko Voice ist einsatzbereit."
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "22D46E" "090909"
+    SetCtlColors $R9 "22D46E" "000814"
     ${NSD_CreateLabel} 18u 76u 244u 1u ""
     Pop $R9
-    SetCtlColors $R9 "" "252532"
+    SetCtlColors $R9 "" "001A35"
     ${NSD_CreateLabel} 18u 88u 244u 13u "Ein Shortcut wurde auf dem Desktop erstellt."
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "44445A" "090909"
+    SetCtlColors $R9 "44445A" "000814"
     ${NSD_CreateCheckbox} 18u 114u 220u 16u " Halko Voice jetzt starten"
     Pop $hv_LaunchCheck
     SendMessage $hv_LaunchCheck ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $hv_LaunchCheck "EEEEF8" "090909"
+    SetCtlColors $hv_LaunchCheck "EEEEF8" "000814"
     ${NSD_Check} $hv_LaunchCheck
     ${NSD_CreateLabel} 0u 198u 100% 1u ""
     Pop $R9
-    SetCtlColors $R9 "" "252532"
+    SetCtlColors $R9 "" "001A35"
     GetDlgItem $R9 $HWNDPARENT 1
     SendMessage $R9 ${WM_SETFONT} $hv_FontMed 0
     SetCtlColors $R9 "FFFFFF" "22D46E"
@@ -136,7 +136,7 @@ Var hv_LaunchCheck
     ShowWindow $R9 ${SW_HIDE}
     GetDlgItem $R9 $HWNDPARENT 2
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "8888A8" "111118"
+    SetCtlColors $R9 "8888A8" "000814"
     nsDialogs::Show
   FunctionEnd
   Function hv_FinishLeave
@@ -155,54 +155,54 @@ Var hv_LaunchCheck
     ${EndIf}
     ${NSD_CreateLabel} 0 0 100% 100% ""
     Pop $R9
-    SetCtlColors $R9 "" "090909"
+    SetCtlColors $R9 "" "000814"
     ${NSD_CreateLabel} 0u 0u 4u 100% ""
     Pop $R9
-    SetCtlColors $R9 "" "7C6BFF"
+    SetCtlColors $R9 "" "007AFF"
     ${NSD_CreateLabel} 18u 14u 244u 18u "Halko Voice wird eingerichtet..."
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontTitle 0
-    SetCtlColors $R9 "EEEEF8" "090909"
+    SetCtlColors $R9 "EEEEF8" "000814"
     ${NSD_CreateLabel} 18u 34u 244u 13u "Vorbereitung..."
     Pop $hv_StatusLabel
     SendMessage $hv_StatusLabel ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $hv_StatusLabel "8888A8" "090909"
+    SetCtlColors $hv_StatusLabel "8888A8" "000814"
     ${NSD_CreateLabel} 18u 56u 244u 1u ""
     Pop $R9
-    SetCtlColors $R9 "" "252532"
+    SetCtlColors $R9 "" "001A35"
     ${NSD_CreateLabel} 18u 70u 244u 8u ""
     Pop $R9
-    SetCtlColors $R9 "" "1A1A24"
+    SetCtlColors $R9 "" "001A35"
     ${NSD_CreateLabel} 18u 70u 0u 8u ""
     Pop $hv_ProgressBar
-    SetCtlColors $hv_ProgressBar "" "7C6BFF"
+    SetCtlColors $hv_ProgressBar "" "007AFF"
     ${NSD_CreateLabel} 18u 90u 12u 13u "1"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "7C6BFF" "090909"
+    SetCtlColors $R9 "007AFF" "000814"
     ${NSD_CreateLabel} 36u 90u 220u 13u "Dateien installieren"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "44445A" "090909"
+    SetCtlColors $R9 "44445A" "000814"
     ${NSD_CreateLabel} 18u 108u 12u 13u "2"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "7C6BFF" "090909"
+    SetCtlColors $R9 "007AFF" "000814"
     ${NSD_CreateLabel} 36u 108u 220u 13u "Shortcuts erstellen"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "44445A" "090909"
+    SetCtlColors $R9 "44445A" "000814"
     ${NSD_CreateLabel} 18u 126u 12u 13u "3"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "7C6BFF" "090909"
+    SetCtlColors $R9 "007AFF" "000814"
     ${NSD_CreateLabel} 36u 126u 220u 13u "Windows Registry"
     Pop $R9
     SendMessage $R9 ${WM_SETFONT} $hv_FontSmall 0
-    SetCtlColors $R9 "44445A" "090909"
+    SetCtlColors $R9 "44445A" "000814"
     ${NSD_CreateLabel} 0u 198u 100% 1u ""
     Pop $R9
-    SetCtlColors $R9 "" "252532"
+    SetCtlColors $R9 "" "001A35"
     nsDialogs::Show /NOUNLOAD
     StrCpy $hv_AnimStep 0
     ${NSD_SetText} $hv_StatusLabel "Dateien werden eingerichtet..."
